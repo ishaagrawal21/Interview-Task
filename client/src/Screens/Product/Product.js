@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import MediaCard from "../../Components/Card";
 import apiHelper from "../../Common/ApiHelper";
-export default function Product() {
+import { Navigate } from "react-router-dom";
+import Path from "../../Common/Path";
+export default function Product({ Auth }) {
   const [Product, setProduct] = useState([]);
 
   const getProduct = async () => {
@@ -27,6 +29,9 @@ export default function Product() {
   };
 
   useEffect(() => {
+    if (!Auth) {
+      return <Navigate to={Path.login} />;
+    }
     getProduct();
   }, []);
 
