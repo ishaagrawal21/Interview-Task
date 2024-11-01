@@ -4,12 +4,12 @@ import DialogContent from "@mui/material/DialogContent";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Joi from "joi";
-import { Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import apiHelper from "../../Common/ApiHelper";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Path from "../../Common/Path";
 
-const SignUp = ({ Auth, setAuth }) => {
+const SignUp = () => {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -18,11 +18,21 @@ const SignUp = ({ Auth, setAuth }) => {
   const [errors, setErrors] = useState({});
 
   const schema = Joi.object({
-    username: Joi.string().min(3).required(),
+    username: Joi.string().min(3).required().messages({
+      "string.empty": "Username is required.",
+      "string.min": "Username should be at least 3 characters long.",
+    }),
     email: Joi.string()
       .email({ tlds: { allow: false } })
-      .required(),
-    password: Joi.string().min(5).required(),
+      .required()
+      .messages({
+        "string.empty": "Email is required.",
+        "string.email": "Please enter a valid email address.",
+      }),
+    password: Joi.string().min(5).required().messages({
+      "string.empty": "Password is required.",
+      "string.min": "Password should be at least 5 characters long.",
+    }),
   });
 
   const handleChange = (e) => {
@@ -45,11 +55,9 @@ const SignUp = ({ Auth, setAuth }) => {
 
         if (result.data.user) {
           navigate(Path.product);
-          setAuth(true);
         }
       }
     } catch (error) {
-      setAuth(false);
       alert(error.response.data.message);
       if (error.response && error.response.data) {
         if (
@@ -97,6 +105,9 @@ const SignUp = ({ Auth, setAuth }) => {
         <Button onClick={handleSubmit} variant="contained" fullWidth>
           Signup
         </Button>
+        <Box mt={3}>
+          <Link to={Path.login}>Do You Have Any Account? go to login</Link>
+        </Box>
       </Grid>
     </Grid>
   );

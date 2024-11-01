@@ -19,7 +19,7 @@ function App() {
         <Routes>
           <Route path={Path.product} element={<Product Auth={Auth} />} />
           <Route path={Path.login} element={<Login setAuth={setAuth} />} />
-          <Route path={Path.signUp} element={<SignUp setAuth={setAuth} />} />
+          <Route path={Path.signUp} element={<SignUp />} />
         </Routes>
         <Footer />
       </div>

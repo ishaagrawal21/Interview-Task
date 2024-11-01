@@ -5,7 +5,7 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -36,6 +36,7 @@ function Header() {
     setAnchorElUser(null);
   };
   const location = useLocation();
+  const navigate = useNavigate();
   return (
     <AppBar
       position="static"
@@ -52,7 +53,7 @@ function Header() {
             variant="h6"
             noWrap
             component={Link}
-            to="/"
+            to={Path.product}
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -111,7 +112,7 @@ function Header() {
             variant="h5"
             noWrap
             component={Link}
-            to="/"
+            to={Path.product}
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
@@ -169,7 +170,15 @@ function Header() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem
+                  key={setting}
+                  onClick={() => {
+                    handleCloseUserMenu();
+                    if (setting === "Logout") {
+                      navigate("/login");
+                    }
+                  }}
+                >
                   <Typography sx={{ textAlign: "center" }}>
                     {setting}
                   </Typography>

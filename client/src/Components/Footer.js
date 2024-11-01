@@ -4,15 +4,17 @@ export default function Footer() {
   return (
     <div
       style={{
-        display: "flex",
         position: "fixed",
         bottom: 0,
+        width: "100%",
         textAlign: "center",
         backgroundColor: "#1976d2",
         color: "white",
+        paddingTop: "0.5rem",
+        paddingBottom: "0.5rem",
       }}
     >
-      Footer
+      Copyright © 2024 Amazon
     </div>
   );
 }

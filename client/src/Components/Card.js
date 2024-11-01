@@ -5,54 +5,31 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import apiHelper from "../Common/ApiHelper";
 
 export default function MediaCard(props) {
-  const { name, price, description, imgUrl, id } = props;
-  const getProduct = async () => {
-    try {
-      const product = await apiHelper.getProduct();
-      if (product) window.location.reload();
-    } catch (error) {
-      if (
-        error &&
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
-        alert(error.response.data.message);
-        return;
-      }
-      console.log(error);
-    }
-  };
-  const deleteProduct = async (id) => {
-    try {
-      const Confirm = window.confirm("Are you sure to delete this product");
-      if (!Confirm) return;
+  const { name, price, description, imgUrl, id, onEdit, onDelete } = props;
 
-      // eslint-disable-next-line
-      const result = await apiHelper.deleteProduct(id);
+  const deleteProduct = async () => {
+    try {
+      const confirmDelete = window.confirm(
+        "Are you sure you want to delete this product?"
+      );
+      if (!confirmDelete) return;
 
-      if (result) getProduct();
+      await onDelete();
     } catch (error) {
-      if (
-        error &&
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
-        return;
-      }
+      const message = error?.response?.data?.message;
+      if (message) alert(message);
+      console.error("Error deleting product:", error);
     }
   };
 
   return (
     <Card sx={{ Width: 145 }}>
-      <CardMedia sx={{ height: 340 }} image={imgUrl} title="green iguana" />
+      <CardMedia sx={{ height: 340 }} image={imgUrl} title="Product Image" />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          Product Name : {name}
+          Product Name: {name}
         </Typography>
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
           Description: {description}
@@ -65,8 +42,13 @@ export default function MediaCard(props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">UPDATE</Button>
-        <Button onClick={() => deleteProduct(id)} size="small">
+        <Button
+          size="small"
+          onClick={() => onEdit({ id, name, description, price, imgUrl })}
+        >
+          UPDATE
+        </Button>
+        <Button size="small" onClick={deleteProduct}>
           Delete
         </Button>
       </CardActions>

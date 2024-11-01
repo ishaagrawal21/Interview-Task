@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
+
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Joi from "joi";
-import { Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import apiHelper from "../../Common/ApiHelper";
 import Path from "../../Common/Path";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = ({ setAuth, Auth }) => {
   const navigate = useNavigate();
@@ -17,7 +16,11 @@ const Login = ({ setAuth, Auth }) => {
   const schema = Joi.object({
     email: Joi.string()
       .email({ tlds: { allow: false } })
-      .required(),
+      .required()
+      .messages({
+        "string.empty": "Email is required.",
+        "string.email": "Please enter a valid email address.",
+      }),
     password: Joi.string().min(5).required(),
   });
 
@@ -41,8 +44,8 @@ const Login = ({ setAuth, Auth }) => {
         if (result) {
           const token = result.data.access_token;
           localStorage.setItem("token", token);
-          navigate(Path.product);
           setAuth(true);
+          navigate(Path.product);
         }
       }
     } catch (error) {
@@ -85,6 +88,9 @@ const Login = ({ setAuth, Auth }) => {
         <Button onClick={handleSubmit} variant="contained" fullWidth>
           Login
         </Button>
+        <Box mt={3}>
+          <Link to={Path.signUp}>Don't Have Any Account? go to Sign Up</Link>
+        </Box>
       </Grid>
     </Grid>
   );
