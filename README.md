@@ -24,3 +24,10 @@ Installation and Setup
 
 Navigate to the frontebd folder:
 cd client >npm install > npm start
+
+react url:
+for product listing : /product
+loginpage:/login
+signup : /
+
+"If the user is not logged in, they are not redirected to any other page."
